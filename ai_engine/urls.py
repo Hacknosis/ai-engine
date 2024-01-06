@@ -20,4 +20,5 @@ from . import views
 urlpatterns = [
     path('api/report/image', views.preprocess, name="preprocess"),
     path('admin/', admin.site.urls),
+    path('', views.index),
 ]
