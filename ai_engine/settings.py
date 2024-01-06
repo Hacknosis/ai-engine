@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-@#iczi1zgad)7sv)@pnw^bihe!0tcvo*3s)c2(-^*v2e8=d)52
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost'] # Allow *.vercel.app
 
+DATABASES = {}
 
 # Application definition
 
@@ -68,18 +69,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ai_engine.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
