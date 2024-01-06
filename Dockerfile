@@ -17,7 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Make port 8000 available to the world outside this container
+ENV PORT 8000
 EXPOSE 8000
 
 # Run app.py when the container launches
-CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --threads 8 --timeout 0 app.wsgi:application
+CMD exec gunicorn ai_engine.wsgi:application --bind :$PORT --workers 1 --threads 8
