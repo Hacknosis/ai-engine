@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 8000
 
 # Run app.py when the container launches
-CMD ["python", "manage.py", "runserver"]
+CMD exec gunicorn --bind 0.0.0.0:8080 --workers 1 --threads 8 --timeout 0 app.wsgi:application
