@@ -170,3 +170,5 @@ context.py
 .conda
 *.pem
 .vercel
+
+kaggle.json
