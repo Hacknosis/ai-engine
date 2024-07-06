@@ -18,7 +18,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('api/report/image', views.preprocess, name="preprocess"),
+    path('api/report/segment_image', views.segment_image, name="segment_image"),
     path('admin/', admin.site.urls),
     path('', views.index),
 ]
