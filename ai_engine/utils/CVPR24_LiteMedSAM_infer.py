@@ -13,10 +13,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ai_engine.modeling.mask_decoder import MaskDecoder
-from ai_engine.modeling.prompt_encoder import PromptEncoder
-from ai_engine.modeling.transformer import TwoWayTransformer
-from ai_engine.modeling.tiny_vit_sam import TinyViT
+from ai_engine.modeling.MedSAM.mask_decoder import MaskDecoder
+from ai_engine.modeling.MedSAM.prompt_encoder import PromptEncoder
+from ai_engine.modeling.MedSAM.transformer import TwoWayTransformer
+from ai_engine.modeling.MedSAM.tiny_vit_sam import TinyViT
 from matplotlib import pyplot as plt
 import cv2
 import argparse

@@ -41,6 +41,7 @@ numpy==1.24.4
 open-clip-torch==2.20.0
 opencv-python==4.7.0.68
 packaging==23.1
+pandas==2.0.3
 partd==1.4.0
 pathlib==1.0.1
 pillow==10.0.0

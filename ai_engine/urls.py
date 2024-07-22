@@ -19,6 +19,7 @@ from . import views
 
 urlpatterns = [
     path('api/report/segment_image', views.segment_image, name="segment_image"),
+    path('api/report/preprocess_image', views.preprocess_image, name="preprocess_image"),
     path('admin/', admin.site.urls),
     path('', views.index),
 ]
