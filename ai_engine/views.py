@@ -9,13 +9,16 @@ from django.http import JsonResponse
 from django import forms
 from PIL import Image
 from datetime import datetime
-from .utils.process import segment
-from .utils.process import quality_improvement
+from .utils.process import *
 
-class UploadForm(forms.Form):
+class SegmentationUploadForm(forms.Form):
     report = forms.FileField(required=True)
     box = forms.CharField(required=True)
     name = forms.CharField(required=True)
+
+class TumorDetectionUploadForm(forms.Form):
+    report = forms.FileField(required=True)
+    type = forms.CharField(required=True)
 
 def nparray_to_encodedbyte(image):
     image = Image.fromarray(image)
@@ -33,7 +36,7 @@ def nparray_to_encodedbyte(image):
 @csrf_exempt
 def segment_image(request):
     if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
+        form = SegmentationUploadForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['report']
             file_bytes = file.read()
@@ -49,9 +52,9 @@ def segment_image(request):
             return JsonResponse({"message": "Invalid request data"}, status=400)
     return JsonResponse({"error": "Invalid request method"})
 
-# Pre-process image
+# Pre-process report for quality
 @csrf_exempt
-def preprocess_image(request):
+def process_report_quality(request):
     if request.method == 'POST':
         encoded_byte = request.body
         if encoded_byte:
@@ -67,14 +70,42 @@ def preprocess_image(request):
 
     return JsonResponse({"error": "Invalid request method"})
 
+# Pre-process report for tumor
+@csrf_exempt
+def process_report_tumor(request):
+    if request.method == 'POST':
+        form = TumorDetectionUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = request.FILES['report']
+            type = form.cleaned_data['type']
+            predicted_byte_raw = detect_tumor(image, TumorType.from_string(type).value)
+            return JsonResponse({"encodedBytes": base64.b64encode(predicted_byte_raw).decode('utf-8')}, status = 200)
+        return JsonResponse({"error": "Invalid form data"}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
+
 @csrf_exempt
 def index(request):
+    import urllib
+
+    import google.auth.transport.requests
+    import google.oauth2.id_token
+
+    req = urllib.request.Request(os.getenv('TUMOR_ENDPOINT'))
+
+    auth_req = google.auth.transport.requests.Request()
+    id_token = google.oauth2.id_token.fetch_id_token(auth_req, os.getenv('TUMOR_ENDPOINT'))
+
+    req.add_header("Authorization", f"Bearer {id_token}")
+    response = urllib.request.urlopen(req)
+
+    res = response.read()
     now = datetime.now()
     html = f'''
     <html>
         <body>
             <h1>Hello from Vercel!</h1>
-            <p>The current time is { now }.</p>
+            <p>The current time is { res.decode('utf-8') }.</p>
         </body>
     </html>
     '''

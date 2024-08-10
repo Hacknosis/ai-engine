@@ -92,3 +92,5 @@ win_inet_pton==1.1.0
 wrapt==1.15.0
 yacs==0.1.8
 zipp==3.16.2
+google-auth
+google-auth-httplib2

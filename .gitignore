@@ -176,3 +176,6 @@ kaggle.json
 input
 output
 overlay
+tokens
+*_tumor
+**/*/cloud_functions

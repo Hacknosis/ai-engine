@@ -18,6 +18,8 @@ from natsort import natsorted
 from glob import glob
 import base64
 import cv2
+from ai_engine.utils.tumor_detect import *
+from ai_engine.modeling.Tumor.tumor_type import *
 
 pre_trained_model = 'ai_engine/pre_trained/lite_medsam.pth'
 medsam = 'ai_engine/utils/CVPR24_LiteMedSAM_infer.py'
@@ -95,8 +97,20 @@ def quality_improvement(task, encoded_image):
     restored = img_as_ubyte(restored[0])
     return restored
 
-def save_img(filepath, img):
-    cv2.imwrite(filepath, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+def detect_tumor(image, type):
+    image_bytes = image.read()
+    file_path = save_file(image_bytes, f'{type}_tumor', image.name)
+    return detect(image.name, file_path, type)
+
+def save_file(file_bytes, base_dir, filename):
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+    
+    file_path = f'{base_dir}/{filename}'
+    with open(file_path, 'wb') as file:
+        file.write(file_bytes)
+
+    return file_path
 
 def load_checkpoint(model, weights):
     checkpoint = torch.load(weights, map_location=torch.device('cpu'))
